@@ -58,7 +58,7 @@ describe('Todos', () => {
       done: false
     });
     expect(validate(response.body.id)).toBe(true);
-    expect(response.body.created_at).toBeTruthy();
+    expect(response.body.createdAt).toBeTruthy();
   });
 
   it('should be able to update a todo', async () => {
