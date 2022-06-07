@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 
 function verifyIfAccountExists(request, response, next) {
-  const { cpf } = request.header;
+  const { cpf } = request.headers;
   const customer = customers.find(customer => customer.cpf === cpf);
   if (!customer) { 
     return response.status(400).json({ error: 'Customer not found' });
