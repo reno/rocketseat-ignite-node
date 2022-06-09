@@ -105,3 +105,6 @@ dist
 
 # OSX files
 *.DS_Store
+
+# temp files
+tmp/
