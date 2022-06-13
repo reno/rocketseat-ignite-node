@@ -1,11 +1,17 @@
-import { Category } from "../../models/category";
+import { inject, injectable } from 'tsyringe'
+import { Category } from "../../entities/category";
 import { CategoriesRepository } from '../../repositories/categories.repository';
 
+@injectable()
 class ListCategoriesUseCase {
-  constructor(private readonly categoriesRepository: CategoriesRepository) {}
 
-  execute(): Category[] {
-    return this.categoriesRepository.list();
+  constructor(
+    @inject('CategoriesRepository')
+    private categoriesRepository: CategoriesRepository
+    ) {}
+
+  async execute(): Promise<Category[]> {
+    return await this.categoriesRepository.list();
   }
 }
 

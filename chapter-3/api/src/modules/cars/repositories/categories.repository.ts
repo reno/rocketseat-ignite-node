@@ -1,4 +1,6 @@
-import { Category } from '../models/category';
+import { Repository } from 'typeorm';
+import { Category } from '../entities/category';
+import { AppDataSource } from '../../../data-source'
 
 interface ICreateCategoryDTO {
   name: string;
@@ -6,37 +8,26 @@ interface ICreateCategoryDTO {
 }
 
 class CategoriesRepository {
-  private categories: Category[];
-  private static INSTANCE: CategoriesRepository;
+  private repository: Repository<Category>;
 
-  private constructor() {
-    this.categories = [];
+  constructor() {
+    this.repository = AppDataSource.getRepository(Category);
   }
 
-  public static getInstance(): CategoriesRepository {
-    if (!CategoriesRepository.INSTANCE) {
-      CategoriesRepository.INSTANCE = new CategoriesRepository();
-    }
-    return CategoriesRepository.INSTANCE;
-  }
-
-  create({ name, description }: ICreateCategoryDTO): Category {
-    const category = new Category(); 
-    Object.assign(category, {
-      name,
-      description,
-      createdAt: new Date(),
-    });
-    this.categories.push(category);
+  async create({ name, description }: ICreateCategoryDTO): Promise<Category> {
+    const category = this.repository.create({ name, description }); 
+    await this.repository.save(category);
     return category;
   }
 
-  list(): Category[] {
-    return this.categories;
+  async list(): Promise<Category[]> {
+    return this.repository.find();
   }
 
-  findByName(name: string): Category | undefined {
-    return this.categories.find(category => category.name === name);
+  findByName(name: string): Promise<Category | undefined> {
+    return this.repository.findOne({
+      where: { name }
+    });
   }
 }
 

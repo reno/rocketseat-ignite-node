@@ -1,11 +1,16 @@
-import { Category } from "../../models/category";
+import { inject, injectable } from 'tsyringe'
+import { Category } from "../../entities/category";
 import { CategoriesRepository, ICreateCategoryDTO } from '../../repositories/categories.repository';
 
+@injectable()
 class CreateCategoryUseCase {
-  constructor(private readonly categoriesRepository: CategoriesRepository) {}
+  constructor(
+    @inject('CategoriesRepository')
+    private categoriesRepository: CategoriesRepository
+  ) {}
 
-  execute({name, description}: ICreateCategoryDTO): Category {
-    const alreadyExists = this.categoriesRepository.findByName(name);
+  async execute({name, description}: ICreateCategoryDTO): Promise<Category> {
+    const alreadyExists = await this.categoriesRepository.findByName(name);
     if (alreadyExists) {
       throw new Error('Category already exists');
     }
