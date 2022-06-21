@@ -1,0 +1,28 @@
+import { inject } from 'tsyringe';
+import { IUsersRepository } from '@modules/accounts/repositories/iUsers.repository';
+import { deleteFile } from '@utils/file'
+
+interface IRequest {
+  userId: string,
+  avatarFile: string
+}
+
+class UpdateUserAvatarUseCase { 
+
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository
+  ) {}
+
+  async execute({ userId, avatarFile}: IRequest): Promise<void> {
+    const user = await this.usersRepository.findById(userId);
+    console.log('USER', user)
+    if (user.avatar) {
+      await deleteFile(`./tmp/avatar/${user.avatar}`);
+    }
+    user.avatar = avatarFile;
+    await this.usersRepository.create(user);
+  }
+}
+
+export { UpdateUserAvatarUseCase };
