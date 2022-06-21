@@ -1,19 +1,19 @@
-import { AuthenticateUserUseCase } from './authenticateUser.useCase';
-import { UsersRepositoryInMemory } from '@modules/accounts/repositories/in-memory/usersInMemory.repository'
-import { CreateUserUseCase } from '../createUser/createUser.useCase';
-import { ICreateUserDTO } from '../../dtos/createUser.dto';
-import { AppError } from '@shared/errors/appError';
+import { AuthenticateUserUseCase } from './AuthenticateUserUseCase';
+import { CreateUserUseCase } from '../createUser/CreateUserUseCase';
+import { InMemoryUsersRepository } from '../../repositories/in-memory/InMemoryUsersRepository';
+import { ICreateUserDTO } from '../createUser/ICreateUserDTO';
+import { AppError } from '../../../../shared/errors/AppError';
 
 let authenticateUserUseCase: AuthenticateUserUseCase;
-let usersRepositoryInMemory: UsersRepositoryInMemory;
 let createUserUseCase: CreateUserUseCase;
+let inMemoryUsersRepository: InMemoryUsersRepository;
 
 describe('Authenticate user', () => {
 
   beforeEach(() => {
-    usersRepositoryInMemory = new UsersRepositoryInMemory();
-    authenticateUserUseCase = new AuthenticateUserUseCase(usersRepositoryInMemory);
-    createUserUseCase = new CreateUserUseCase(usersRepositoryInMemory);
+    inMemoryUsersRepository = new InMemoryUsersRepository();
+    authenticateUserUseCase = new AuthenticateUserUseCase(inMemoryUsersRepository);
+    createUserUseCase = new CreateUserUseCase(inMemoryUsersRepository);
   });
 
   it('Should be able to authenticate an user', async () => {
@@ -21,10 +21,9 @@ describe('Authenticate user', () => {
       name: 'Test user',
       email: 'user@test.com',
       password: 'p4ssw0rd',
-      driver_license: '12345678'
     }
     const user = await createUserUseCase.execute(data);
-    const result = authenticateUserUseCase.execute({
+    const result = await authenticateUserUseCase.execute({
       email: data.email,
       password: data.password
     });
@@ -46,7 +45,6 @@ describe('Authenticate user', () => {
   //       name: 'Test user',
   //       email: 'user@test.com',
   //       password: 'p4ssw0rd',
-  //       driver_license: '12345678'
   //     }
   //     await createUserUseCase.execute(data);
   //     authenticateUserUseCase.execute({
