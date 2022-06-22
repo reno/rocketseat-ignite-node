@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn -r tsconfig-paths/register src/shared/infra/http/server.ts",
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli",
-    "test": "jest --runInBand",
+    "test": "jest --runInBand --no-cache",
+    "test:integration": "yarn test --runInBand --config ./jest.integration.config.ts",
     "seed:admin": "ts-node-dev src/shared/infra/database/seeds/admin.ts"
   },
   "dependencies": {
