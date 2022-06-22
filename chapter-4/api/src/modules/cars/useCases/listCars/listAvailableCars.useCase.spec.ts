@@ -63,7 +63,7 @@ describe('ListCarsUseCase', () => {
       brand: 'Volkswagen',
       category_id: 'Category ID',
     });
-    const availableCars = await listCarsUseCase.execute({ category_id: car.category });
+    const availableCars = await listCarsUseCase.execute({ category_id: car.category_id });
     expect(availableCars).toContainEqual(car);
   });
 });

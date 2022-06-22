@@ -30,9 +30,12 @@ class Car {
   @Column()
   brand: string;
 
+  @Column()
+  category_id: string; 
+
   @ManyToOne(() => Category, { nullable: true })
   @JoinColumn({ name: 'category_id' })
-  category: string;
+  category: Category;
 
   @ManyToMany(() => Specification)
   @JoinTable({

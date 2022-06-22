@@ -8,6 +8,7 @@ let carsRepositoryInMemory: CarsRepositoryInMemory;
 describe('Create a car', () => {
 
   beforeEach(() => {
+    carsRepositoryInMemory = new CarsRepositoryInMemory();
     createCarUseCase = new CreateCarUseCase(carsRepositoryInMemory);
   })
 

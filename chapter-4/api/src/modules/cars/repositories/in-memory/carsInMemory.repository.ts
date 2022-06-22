@@ -21,7 +21,7 @@ class CarsRepositoryInMemory implements ICarsRepository {
     availableCars = availableCars.filter((car) => {
       if (car.name === filterData.name) return true;
       if (car.brand === filterData.brand) return true;
-      if (car.category === filterData.category_id) return true;
+      if (car.category_id === filterData.category_id) return true;
       return false;
     });
 

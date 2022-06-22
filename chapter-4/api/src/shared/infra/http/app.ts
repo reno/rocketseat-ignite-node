@@ -4,7 +4,6 @@ import 'express-async-errors'
 import { router } from './routes'
 import { AppError } from '@shared/errors/appError'
 import swaggerFile from '../../../swagger.json';
-import '../database';
 import '@shared/container';
 
 const app = express();

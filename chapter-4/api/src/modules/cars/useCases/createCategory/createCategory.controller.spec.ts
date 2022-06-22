@@ -1,16 +1,16 @@
 import request from 'supertest';
-import { DataSource } from 'typeorm';
+import { createConnection, DataSource } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import * as bcrypt from 'bcryptjs';
 import { app } from '@shared/infra/http/app';
-//import createConnection from '@shared/infra/typeorm';
-import { TestDataSource } from '@shared/infra/database/data-source';
+//import { TestDataSource } from '@shared/infra/database/data-source';
+import { AppDataSource } from '@shared/infra/database/data-source';
 
 //let connection: Connection;
-let connection: DataSource;
+let connection: any;
 describe('Create Category Controller', () => {
   beforeAll(async () => {
-    connection = await TestDataSource.initialize();
+    connection = await AppDataSource.initialize();
     //connection = await createConnection();
     await connection.runMigrations();
 
@@ -18,7 +18,7 @@ describe('Create Category Controller', () => {
     const password = await bcrypt.hash('admin', 8);
 
     await connection.query(
-      `INSERT INTO USERS(id, name, email, password, 'isAdmin', created_at, driver_license ) 
+      `INSERT INTO USERS(id, name, email, password, is_admin, created_at, driver_license ) 
         values('${id}', 'admin', 'admin@rentx.com.br', '${password}', true, 'now()', 'XXXXXX')
       `
     );
@@ -68,6 +68,6 @@ describe('Create Category Controller', () => {
         Authorization: `Bearer ${refresh_token}`,
       });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(401);
   });
 });

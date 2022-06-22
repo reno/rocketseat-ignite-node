@@ -24,7 +24,7 @@ describe('Authenticate user', () => {
       driver_license: '12345678'
     }
     const user = await createUserUseCase.execute(data);
-    const result = authenticateUserUseCase.execute({
+    const result = await authenticateUserUseCase.execute({
       email: data.email,
       password: data.password
     });

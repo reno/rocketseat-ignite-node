@@ -18,8 +18,10 @@ class CreateUserUseCase {
       throw new AppError('User already exists', 401);
     }
     const hashedPassword = await bcrypt.hash(data.password, 8);
-    data.password = hashedPassword;
-    return this.usersRepository.create(data);
+    return this.usersRepository.create({
+      ...data,
+      password: hashedPassword
+    });
   }
 }
 

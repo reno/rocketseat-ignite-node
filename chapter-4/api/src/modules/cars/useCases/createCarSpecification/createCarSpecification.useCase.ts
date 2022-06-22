@@ -22,7 +22,7 @@ class CreateCarSpecificationUseCase {
     }
     const specifications = await this.specificationsRepository.findByIds(data.specifications_id);
     car.specifications = specifications;
-    return await this.carsRepository.create({ ...car, category_id: car.category });
+    return await this.carsRepository.create({ ...car, category_id: car.category?.id });
   }
 }
 

@@ -3,21 +3,22 @@ import request from 'supertest';
 import { v4 as uuid } from 'uuid';
 import * as bcrypt from 'bcryptjs';
 import { app } from '@shared/infra/http/app';
-import { TestDataSource } from '@shared/infra/database/data-source';
+// import { TestDataSource } from '@shared/infra/database/data-source';
+import { AppDataSource } from '@shared/infra/database/data-source';
 
 
-let connection: DataSource;
+let connection: any;
 describe('Create Category Controller', () => {
   beforeAll(async () => {
     //connection = await createConnection();
-    connection = await TestDataSource.initialize();
+    connection = await AppDataSource.initialize();
     await connection.runMigrations();
 
     const id = uuid();
     const password = await bcrypt.hash('admin', 8);
 
     await connection.query(
-      `INSERT INTO USERS(id, name, email, password, 'isAdmin', created_at, driver_license ) 
+      `INSERT INTO USERS(id, name, email, password, is_admin, created_at, driver_license ) 
         values('${id}', 'admin', 'admin@rentx.com.br', '${password}', true, 'now()', 'XXXXXX')
       `
     );
@@ -47,7 +48,7 @@ describe('Create Category Controller', () => {
       });
 
     const response = await request(app).get('/categories');
-
+      
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(1);
     expect(response.body[0]).toHaveProperty('id');
